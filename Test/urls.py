@@ -17,8 +17,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
-from UI import api_view as aview
-from UI import views 
+from API import api_view as aview
+from API import views 
 from rest_framework import routers
 from rest_framework.urlpatterns import format_suffix_patterns
 
@@ -33,7 +33,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('route/', include(route.urls)),
     path('api-auth/', include('rest_framework.urls'), name="rest_framework"),
-    path('snippet/', views.SnippetList.as_view() ),
+    path('snippet/', views.SnippetList.as_view()),
     path('snippet/<int:pk>', views.SnippetDetail.as_view()),
 ]
 
