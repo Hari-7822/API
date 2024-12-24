@@ -3,15 +3,16 @@ from django.views.decorators.csrf import csrf_exempt
 
 from .models import Snippet
 from .serializers import Modelserializer
-
+from API.permissions import IsOwnerOrReadOnly
 from rest_framework.parsers import JSONParser
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from rest_framework import status
+from rest_framework import status, permissions
 from rest_framework.views import APIView
 
 
 class SnippetList(APIView):
+    # permission_classes=[permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
     def get(self, req, format=None):
         snip = Snippet.objects.all()
         ser = Modelserializer(snip, many=True)
@@ -26,6 +27,7 @@ class SnippetList(APIView):
 
 
 class SnippetDetail(APIView):
+    permission_classes=[permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
     def get_object(self, pk):
         try:
             return Snippet.objects.get(pk=pk)

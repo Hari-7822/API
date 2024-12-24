@@ -21,6 +21,7 @@ class SnippetSerializer(serializers.Serializer):
     lineos= serializers.BooleanField(required=False)
     language= serializers.ChoiceField(choices=LANGUAGE_CHOICES, default='python')
     style = serializers.ChoiceField(choices = STYLE_CHOICES, default='friendlly')
+    owner = serializers.ReadOnlyField(source='owner.username')
 
 
     def create(self, data):
@@ -41,4 +42,12 @@ class SnippetSerializer(serializers.Serializer):
 class Modelserializer(serializers.ModelSerializer):
     class Meta:
         model = Snippet
-        fields = ['id', 'title', 'code', 'lineos', 'language', 'style']
+        fields = ['id', 'title', 'code', 'lineos', 'language', 'style', 'owner']
+
+
+class userSerializer(serializers.ModelSerializer):
+    snippet = serializers.PrimaryKeyRelatedField(many=True, queryset=Snippet.objects.all())
+
+    class Meta:
+        model = user
+        fields=['id', 'username', 'snippet']

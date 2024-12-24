@@ -23,18 +23,20 @@ from rest_framework import routers
 from rest_framework.urlpatterns import format_suffix_patterns
 
 
-route = routers.DefaultRouter()
-route.register(r'users', aview.UserView)
-route.register(r'groups', aview.GroupView)
+# route = routers.DefaultRouter()
+# route.register(r'users', aview.UserView)
+# route.register(r'groups', aview.GroupView)
 
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('route/', include(route.urls)),
+    # path('route/', include(route.urls)),
     path('api-auth/', include('rest_framework.urls'), name="rest_framework"),
     path('snippet/', views.SnippetList.as_view()),
     path('snippet/<int:pk>', views.SnippetDetail.as_view()),
+    path('users/', aview.UserList.as_view()),
+    path("users/<int:pk>", aview.UserDetail.as_view()),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
