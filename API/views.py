@@ -7,51 +7,70 @@ from API.permissions import IsOwnerOrReadOnly
 from rest_framework.parsers import JSONParser
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from rest_framework import status, permissions
+from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.reverse import reverse
 
-
-class SnippetList(APIView):
-    # permission_classes=[permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
-    def get(self, req, format=None):
-        snip = Snippet.objects.all()
-        ser = Modelserializer(snip, many=True)
-        return Response(ser.data)
-
-    def post(self, req, format=None):
-        ser = Modelserializer(data=req.data)
-        if ser.is_valid():
-            ser.save()
-            return Response(ser.data, stauts=status.HTTP_201_CREATED)
-        return Response(ser.errors, status=status.HTTP_400_BAD_REQUEST)
+from rest_framework import permissions, renderers, viewsets
+from rest_framework.decorators import action
 
 
-class SnippetDetail(APIView):
+class SnippetViewSet(viewsets.ModelViewSet):
+    queryset = Snippet.objects.all()
+    serializer_class=Modelserializer
     permission_classes=[permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
-    def get_object(self, pk):
-        try:
-            return Snippet.objects.get(pk=pk)
-        except Snippet.DoesNotExist:
-            raise Http404
 
-    def get(self, request, pk, format=None):
-        snip = self.get_object(pk)
-        ser = Modelserializer(snip)
-        return Response(ser.data)
+    @action(detail=True, renderer_class=[renderers.StaticHTMLRenderer])
+    def highlight(self, req, *args, **kwargs):
+        snippet=self.get_object()
+        return Response(snipped.highlighted)
+    def perform_create(self, ser):
+        ser.save(owner=self.request.user)    
 
-    def put(self, req, pk, format=None):
-        snip = self.get_object(pk)
-        ser = Modelserializer(snip, data=req.data)
-        if ser.is_valid():
-            ser.save()
-            return Response(ser.data)
-        return Response(ser.errors, status=status.HTTP_400_BAD_REQUEST)
+# class SnippetList(APIView):
+#     # permission_classes=[permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
+#     def get(self, req, format=None):
+#         snip = Snippet.objects.all()
+#         ser = Modelserializer(snip, many=True)
+#         return Response(ser.data)
 
-    def delete(self, req, pk, format=None):
-        snip=self.get_object(pk)
-        snip.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+#     def post(self, req, format=None):
+#         ser = Modelserializer(data=req.data)
+#         if ser.is_valid():
+#             ser.save()
+#             return Response(ser.data, stauts=status.HTTP_201_CREATED)
+#         return Response(ser.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+# class SnippetDetail(APIView):
+#     permission_classes=[permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
+#     def get_object(self, pk):
+#         try:
+#             return Snippet.objects.get(pk=pk)
+#         except Snippet.DoesNotExist:
+#             raise Http404
+
+#     def get(self, request, pk, format=None):
+#         snip = self.get_object(pk)
+#         ser = Modelserializer(snip)
+#         return Response(ser.data)
+
+#     def put(self, req, pk, format=None):
+#         snip = self.get_object(pk)
+#         ser = Modelserializer(snip, data=req.data)
+#         if ser.is_valid():
+#             ser.save()
+#             return Response(ser.data)
+#         return Response(ser.errors, status=status.HTTP_400_BAD_REQUEST)
+
+#     def delete(self, req, pk, format=None):
+#         snip=self.get_object(pk)
+#         snip.delete()
+#         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+
+
 
 @api_view(['GET', 'POST'])
 def snippet_list(req, format=None):

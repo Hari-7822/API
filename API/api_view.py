@@ -16,16 +16,20 @@ class GroupView(viewsets.ModelViewSet):
     serializer_class=GroupSerializers
     permission_classes=[permissions.IsAuthenticated]
 
-class UserList(generics.ListAPIView):
-    queryset=user.objects.all()
+# class UserList(generics.ListAPIView):
+#     queryset=user.objects.all()
+#     serializer_class = UserSerializer
+#     permission_classes = [permissions.IsAuthenticated]
+
+# class UserDetail(generics.RetrieveAPIView):
+#     queryset=user.objects.all()
+#     serializer_class = userSerializer
+#     # permission_classes = [permissions.IsAuthenticated]
+
+
+class UserViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = user.objects.all()
     serializer_class = UserSerializer
-    permission_classes = [permissions.IsAuthenticated]
-
-class UserDetail(generics.RetrieveAPIView):
-    queryset=user.objects.all()
-    serializer_class = userSerializer
-    # permission_classes = [permissions.IsAuthenticated]
-
 
 class SnippetHighlight(generics.GenericAPIView):
     queryset=Snippet.objects.all()
