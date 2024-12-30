@@ -32,11 +32,13 @@ from rest_framework.urlpatterns import format_suffix_patterns
 urlpatterns = [
     path('admin/', admin.site.urls),
     # path('route/', include(route.urls)),
+    path('', views.api_root),
     path('api-auth/', include('rest_framework.urls'), name="rest_framework"),
-    path('snippet/', views.SnippetList.as_view()),
-    path('snippet/<int:pk>', views.SnippetDetail.as_view()),
-    path('users/', aview.UserList.as_view()),
-    path("users/<int:pk>", aview.UserDetail.as_view()),
+    path('snippet/', views.SnippetList.as_view(), name='snippet-list'),
+    path('snippet/<int:pk>/', views.SnippetDetail.as_view(), name='snippet-detail'),
+    path('snippet/<int:pk>/highlight', aview.SnippetHighlight.as_view(), name='snippet-highlight'),
+    path('users/', aview.UserList.as_view(), name='user-list'),
+    path("users/<int:pk>", aview.UserDetail.as_view(), name='user-detail'),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

@@ -9,6 +9,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework import status, permissions
 from rest_framework.views import APIView
+from rest_framework.reverse import reverse
 
 
 class SnippetList(APIView):
@@ -91,3 +92,12 @@ def snippet_detail(req, pk, format=None):
         elif req.method == "DELETE":
             data.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
+        
+
+
+@api_view(["GET"])
+def api_root(req, format=None):
+    return Response({
+        'users': reverse('user-list', request=req, format=format),
+        'snippet': reverse('snippet-list', request=req, format=format)
+    })
