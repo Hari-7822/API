@@ -2,35 +2,43 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Demo Form</title>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <title>Index</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
 </head>
 <body>
-    <ul id="demoList">
-        {% for i in data %}
-            <li style='list-style:number'>{{ i.name }}</li>
-        {% endfor %}
-    </ul>
+<div id="data-container"></div>
 
-    <script>
-        $(document).ready(function() {
-            function updateDemoList() {
-                $.ajax({
-                    url: "{% url 'index' %}",
-                    type: "GET",
-                    dataType: "json",
-                    success: function(response) {
-                        $('#demoList').html('');
-                        $.each(response.data, function(index, data) {
-                            $('#demoList').append('<li style="list-style:number">' + data.name + '</li>');
-                        });
-                    }
-                });
-            }
-
-            // Call updateDemoList periodically or based on some event
-            setInterval(updateDemoList, 5000); // Update every 5 seconds
-        });
-    </script>
 </body>
-</html>
+<script>
+    $(document).ready(function() {
+        function fetchData() {
+            $.ajax({
+                url: 'http://127.0.0.1:8000/demo/',
+                method: 'GET',
+                success: function(data) {
+                    let results = data.results;
+                    let html = '<ul>';
+                    results.forEach(function(item) {
+                        html += '<li>ID: ' + item.id + ', Name: ' + item.name + '</li>';
+                    });
+                    html += '</ul>';
+                    $('#data-container').html(html);
+                },
+                error: function(error) {
+                    // Handle the error
+                    $('#data-container').html('Error: ' + error.statusText);
+                }
+            });
+        }
+
+        // Fetch data initially
+        fetchData();
+
+        // Set up polling to fetch data every 5 seconds
+        setInterval(fetchData, 5000);
+    });
+</script>
+
+
+

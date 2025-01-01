@@ -2,6 +2,8 @@ from django.contrib.auth.models import Group
 from .models import user, Snippet, LANGUAGE_CHOICES, STYLE_CHOICES
 from rest_framework import serializers
 
+from ajax.models import Demo
+
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = user
@@ -53,3 +55,11 @@ class userSerializer(serializers.ModelSerializer):
     class Meta:
         model = user
         fields=['url', 'id', 'username', 'snippet']
+
+class NewSerializer(serializers.Serializer):
+    id= serializers.IntegerField(read_only=True)
+    name = serializers.CharField(required=True, allow_blank=True, max_length=255)
+    
+    class Meta:
+        model = Demo
+        fields=['id', 'name']

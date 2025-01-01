@@ -47,6 +47,8 @@ snippet_highlight = views.SnippetViewSet.as_view({
 
 user_list = aview.UserViewSet.as_view({'get':'list'})
 user_detail= aview.UserViewSet.as_view({'get': 'retrieve'})
+demo_list = aview.NewView.as_view({'get':'list'})
+demo_detail= aview.NewView.as_view({'get': 'retrieve'})
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -58,6 +60,8 @@ urlpatterns = [
     path('snippet/<int:pk>/highlight', snippet_highlight, name='snippet-highlight'),
     path('users/', user_list, name='user-list'),
     path("users/<int:pk>", user_detail, name='user-detail'),
+    path('demo/', demo_list, name='demo-list'),
+    path("demo/<int:pk>", demo_detail, name='demo-detail'),
 
     path('ajax/', include('ajax.urls'))
 ]
