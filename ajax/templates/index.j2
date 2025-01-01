@@ -1,0 +1,36 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Demo Form</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <ul id="demoList">
+        {% for i in data %}
+            <li style='list-style:number'>{{ i.name }}</li>
+        {% endfor %}
+    </ul>
+
+    <script>
+        $(document).ready(function() {
+            function updateDemoList() {
+                $.ajax({
+                    url: "{% url 'index' %}",
+                    type: "GET",
+                    dataType: "json",
+                    success: function(response) {
+                        $('#demoList').html('');
+                        $.each(response.data, function(index, data) {
+                            $('#demoList').append('<li style="list-style:number">' + data.name + '</li>');
+                        });
+                    }
+                });
+            }
+
+            // Call updateDemoList periodically or based on some event
+            setInterval(updateDemoList, 5000); // Update every 5 seconds
+        });
+    </script>
+</body>
+</html>

@@ -19,6 +19,8 @@ from django.urls import path, include
 
 from API import api_view as aview
 from API import views 
+from ajax import urls
+
 from rest_framework import routers, renderers
 from rest_framework.urlpatterns import format_suffix_patterns
 
@@ -56,6 +58,8 @@ urlpatterns = [
     path('snippet/<int:pk>/highlight', snippet_highlight, name='snippet-highlight'),
     path('users/', user_list, name='user-list'),
     path("users/<int:pk>", user_detail, name='user-detail'),
+
+    path('ajax/', include('ajax.urls'))
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

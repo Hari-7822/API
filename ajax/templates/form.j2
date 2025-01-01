@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Demo Form</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <form id="demoForm" method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Submit</button>
+    </form>
+    <div id="formErrors"></div>
+    <script>
+        $(document).ready(function() {
+            $('#demoForm').on('submit', function(event) {
+                event.preventDefault();
+                $.ajax({
+                    url: "{% url 'form' %}",
+                    type: "POST",
+                    data: $(this).serialize(),
+                    success: function(response) {
+                        if (response.success) {
+                            alert('Form submitted successfully!');
+                            $('#demoForm')[0].reset();
+                            // Optionally, update the index page content here
+                        } else {
+                            $('#formErrors').html('');
+                            $.each(response.errors, function(key, value) {
+                                $('#formErrors').append('<p>' + key + ': ' + value + '</p>');
+                            });
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
