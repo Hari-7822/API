@@ -63,3 +63,12 @@ class NewSerializer(serializers.Serializer):
     class Meta:
         model = Demo
         fields=['id', 'name']
+
+    def create(self, **data):
+        return Snippet.objects.create(**data)
+
+    def update(self, inst, data):
+        inst.title= data.get('name', inst.name)
+        inst.save()
+
+        return inst

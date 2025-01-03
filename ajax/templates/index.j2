@@ -20,22 +20,20 @@
                     let results = data.results;
                     let html = '<ul>';
                     results.forEach(function(item) {
-                        html += '<li>ID: ' + item.id + ', Name: ' + item.name + '</li>';
+                        html += '<li> Name: ' + item.name + '</li>';
                     });
                     html += '</ul>';
                     $('#data-container').html(html);
                 },
                 error: function(error) {
-                    // Handle the error
+                    
                     $('#data-container').html('Error: ' + error.statusText);
                 }
             });
         }
 
-        // Fetch data initially
+        
         fetchData();
-
-        // Set up polling to fetch data every 5 seconds
         setInterval(fetchData, 5000);
     });
 </script>
